@@ -9,9 +9,6 @@
         opts.render = render;
         var that = this;
         var templates = function(method, locals) {
-            if (locals !== undefined) {
-                locals = $.parseJSON(locals);
-            }
             var methods = {
                 _default: function() {
                     return $.extend(true, {},
@@ -45,12 +42,21 @@
             return hsh;
         };
 
-        var renderTemplate = function(view, locals) {
+        var parseLocals = function(view) {
+            var locals = $(view).attr('data-locals');
+            if (locals !== undefined) {
+                locals = $.parseJSON(locals);
+            }
+            return locals;
+        };
+
+        var renderTemplate = function(view) {
             var name,
+            locals,
             template;
             name = $(view).attr('data-template');
             if (name !== undefined) {
-                locals = $(view).attr('data-locals');
+                locals = parseLocals($(view));
                 template = $('.templates *[data-template-name=' + name + ']').html();
                 view.html($.mustache(template, templates(name, locals)));
             }
@@ -91,12 +97,12 @@
             $('body').attr('data-action', action);
             $('body').addClass('rendered');
         }
-        function init(options){
-          $(document).on('click', '.route',
-          function(event) {
-              event.preventDefault();
-              route($(this));
-          });
+        function init(options) {
+            $(document).on('click', '.route',
+            function(event) {
+                event.preventDefault();
+                route($(this));
+            });
         }
         init(opts);
         return opts;

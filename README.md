@@ -10,7 +10,7 @@ Spineless has only two dependencies which is Mustache.js and JQuery.
 How to be spineless
 -------------------
 
-Mustache uses the concept of controllers and views and partials (called templates). The best way explain spineless is to use it. Consider the following example:
+Spineless uses the concept of controllers and views and partials (called templates). The best way explain spineless is to use it. Consider the following example:
 
 ```html
 <body>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hello World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/application.css" type="text/css" media="screen">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <h1>Examples of locals</h1>
+    <div class="application">
+      <div class="controller" data-controller='application'>
+        <div class="view" data-action='index'>
+          <div data-locals="{&quot;name&quot;:&quot;Mark&quot;}" data-template='hi-my-name-is'></div>
+          <div data-locals="{&quot;name&quot;:&quot;Tron&quot;}" data-template='hi-my-name-is'></div>
+          <div data-locals="{&quot;name&quot;:&quot;Slim Shady&quot;}" data-template='hi-my-name-is'></div>
+        </div>
+      </div>
+    </div>
+    <div class="templates">
+      <div data-template-name='hi-my-name-is'>
+        <h1>Hy My name is {{name}}</h1>
+      </div>
+    </div>
+
+    <script src="../lib/jquery-1.7.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lib/jquery.mustache.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../spineless.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var sp = $.spineless();
+        sp.render('application', 'index');
+      });
+    </script>
+  </body>
+</html>
