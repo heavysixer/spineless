@@ -6,6 +6,7 @@
    */
     var Application = function() {
         return {
+            controllers :[],
             helpers: {
                 _default: function(locals) {
                     return $.extend(true, {},
@@ -17,7 +18,7 @@
 
     var Spineless = function(options) {
         this.app = new Application();
-        this.app.render = render;
+        this.app.get = get;
         var that = this;
         var templates = function(method, locals) {
             return (that.app.helpers.hasOwnProperty(method)) ? that.app.helpers[method](locals) : that.app.helpers._default(locals);
@@ -88,10 +89,10 @@
             var url;
             url = element.attr('href') || $(element).attr('data-href');
             var route = parseRoute(url);
-            render(route.controller, route.action);
+            get(route.controller, route.action);
         };
 
-        function render(controller, action, params) {
+        function get(controller, action, params) {
             $('body').removeClass('rendered');
             $('html,body').animate({
                 scrollTop: 0
