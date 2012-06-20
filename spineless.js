@@ -16,13 +16,16 @@
         };
     };
 
-    var Request = function(route) {
-        return $.extend(true, {
-            action: undefined,
-            controller: undefined,
-            params: undefined
-        },
-        route);
+    var Request = function(controller, action, params) {
+        var p = (typeof(params) === 'undefined') ? {}: params;
+        return {
+            controller: $(".controller[data-controller=" + controller + "]"),
+            view: $(".controller[data-controller=" + controller + "] .view[data-action=" + action + "]"),
+            params: $.extend(true, p, {
+                controller: controller,
+                action: action
+            })
+        };
     };
 
     var Spineless = function(options) {
@@ -76,16 +79,12 @@
         };
 
         var prepareRender = function() {
-            var view,
-            kontroller;
-            kontroller = $(".controller[data-controller=" + that.request.controller + "]");
-            view = $(".controller[data-controller=" + that.request.controller + "] .view[data-action=" + that.request.action + "]");
-            $('.view.active').removeClass('active');
-            $('.controller.active').removeClass('active');
-            if ($(".container[data-controller=" + that.request.controller + "]") && $(".view[data-action=" + that.request.action + "]")) {
-                view.addClass('active');
-                kontroller.addClass("active");
-                return view.find("*[data-template]");
+            if (that.request.controller && that.request.view) {
+                $('.view.active').removeClass('active');
+                $('.controller.active').removeClass('active');
+                that.request.view.addClass('active');
+                that.request.controller.addClass("active");
+                return that.request.view.find("*[data-template]");
             }
             return [];
         };
@@ -110,17 +109,13 @@
         };
 
         var postRender = function() {
-            $('body').attr('data-controller', that.request.controller);
-            $('body').attr('data-action', that.request.action);
+            $('body').attr('data-controller', that.request.params.controller);
+            $('body').attr('data-action', that.request.params.action);
             $('body').addClass('rendered');
         };
 
         var get = function(controller, action, params) {
-            that.request = new Request({
-                controller: controller,
-                action: action,
-                params: params
-            });
+            that.request = new Request(controller, action, params);
             $('body').removeClass('rendered');
             $('html,body').animate({
                 scrollTop: 0
@@ -129,7 +124,7 @@
 
             var itemsToRender = prepareRender();
             if (controllerActionAvailable()) {
-                that.app.controllers[that.request.controller][that.request.action].apply(that.app, [that.request]);
+                that.app.controllers[that.request.controller][that.request.action].apply(that.app, [itemsToRender, that.request]);
             } else {
                 render(itemsToRender);
             }
