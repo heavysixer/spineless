@@ -6,7 +6,7 @@
    */
     var Application = function() {
         return {
-            controllers : {},
+            controllers: {},
             helpers: {
                 _default: function(locals) {
                     return $.extend(true, {},
@@ -16,12 +16,13 @@
         };
     };
 
-    var Request = function(route){
-      return $.extend(true, {
-        action : undefined,
-        controller : undefined,
-        params : undefined
-      }, route);
+    var Request = function(route) {
+        return $.extend(true, {
+            action: undefined,
+            controller: undefined,
+            params: undefined
+        },
+        route);
     };
 
     var Spineless = function(options) {
@@ -74,7 +75,7 @@
             }
         };
 
-        var render = function() {
+        var prepareRender = function() {
             var view,
             kontroller;
             kontroller = $(".controller[data-controller=" + that.request.controller + "]");
@@ -82,43 +83,59 @@
             $('.view.active').removeClass('active');
             $('.controller.active').removeClass('active');
             if ($(".container[data-controller=" + that.request.controller + "]") && $(".view[data-action=" + that.request.action + "]")) {
-                $.each(view.find("*[data-template]"),
-                function(i, e) {
-                    renderTemplate($(e));
-                });
                 view.addClass('active');
                 kontroller.addClass("active");
+                return view.find("*[data-template]");
             }
+            return [];
+        };
+
+        var render = function(elements) {
+            $.each(elements,
+            function(i, e) {
+                renderTemplate($(e));
+            });
         };
 
         var route = function(element) {
             var url;
             url = element.attr('href') || $(element).attr('data-href');
             var route = parseRoute(url);
-            get(route.controller,route.action,route.params);
+            get(route.controller, route.action, route.params);
         };
 
-        var controllerActionAvailable = function(){
-          return that.app.controllers.hasOwnProperty(that.request.controller) &&
-          that.app.controllers[that.request.controller].hasOwnProperty(that.request.action);
+        var controllerActionAvailable = function() {
+            return that.app.controllers.hasOwnProperty(that.request.controller) &&
+            that.app.controllers[that.request.controller].hasOwnProperty(that.request.action);
         };
 
-        function get(controller,action,params) {
-            that.request = new Request({ controller : controller, action : action, params : params });
+        var postRender = function() {
+            $('body').attr('data-controller', that.request.controller);
+            $('body').attr('data-action', that.request.action);
+            $('body').addClass('rendered');
+        };
+
+        var get = function(controller, action, params) {
+            that.request = new Request({
+                controller: controller,
+                action: action,
+                params: params
+            });
             $('body').removeClass('rendered');
             $('html,body').animate({
                 scrollTop: 0
             },
             1);
-            if(controllerActionAvailable()){
-              that.app.controllers[that.request.controller][that.request.action].apply(that.app,[that.request]);
-            }else{
-              render();
+
+            var itemsToRender = prepareRender();
+            if (controllerActionAvailable()) {
+                that.app.controllers[that.request.controller][that.request.action].apply(that.app, [that.request]);
+            } else {
+                render(itemsToRender);
             }
-            $('body').attr('data-controller', controller);
-            $('body').attr('data-action', action);
-            $('body').addClass('rendered');
-        }
+
+            postRender();
+        };
 
         function init(options) {
             $(document).on('click', '.route',

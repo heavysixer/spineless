@@ -44,8 +44,9 @@
           var sp = $.spineless({
             controllers : {
               application : {
-                bing : function(request){
-                  this.render();
+                bing : function(elements, request){
+                  console.log(elements);
+                  this.render(elements);
                 }
               }
             }
