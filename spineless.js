@@ -4,18 +4,23 @@
    * spineless.js - A simple MVC stack without the need of a backbone.
    * https://github.com/heavysixer/spineless
    */
-    var Spineless = function(options) {
-        var opts = (typeof options !== "undefined") || {};
-        opts.render = render;
-        var that = this;
-        var templates = function(method, locals) {
-            var methods = {
-                _default: function() {
+    var Application = function() {
+        return {
+            helpers: {
+                _default: function(locals) {
                     return $.extend(true, {},
                     locals);
                 }
-            };
-            return (methods.hasOwnProperty(method)) ? methods[method](locals) : methods._default(locals);
+            }
+        };
+    };
+
+    var Spineless = function(options) {
+        this.app = new Application();
+        this.app.render = render;
+        var that = this;
+        var templates = function(method, locals) {
+            return (that.app.helpers.hasOwnProperty(method)) ? that.app.helpers[method](locals) : that.app.helpers._default(locals);
         };
 
         var parseRoute = function(str) {
@@ -97,17 +102,19 @@
             $('body').attr('data-action', action);
             $('body').addClass('rendered');
         }
+
         function init(options) {
             $(document).on('click', '.route',
             function(event) {
                 event.preventDefault();
                 route($(this));
             });
+            $.extend(true, that.app, options);
         }
-        init(opts);
-        return opts;
+        init(options);
+        return this.app;
     };
-    $.spineless = function(opts) {
-        return new Spineless(opts);
+    $.spineless = function(options) {
+        return new Spineless(options);
     };
 })(jQuery);

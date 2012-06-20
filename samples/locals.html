@@ -31,9 +31,18 @@
     <script src="../lib/jquery.mustache.js" type="text/javascript" charset="utf-8"></script>
     <script src="../spineless.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
-      $(document).ready(function(){
-        var sp = $.spineless();
-        sp.render('application', 'index');
+      $(document).ready(function() {
+          var sp = $.spineless({
+              helpers: {
+                  'hi-my-name-is': function(obj) {
+                      if (obj.name === 'Slim Shady') {
+                          obj.name = "*wikka wikka* " + obj.name + " *wikka wikka*";
+                      }
+                      return (obj);
+                  }
+              }
+          });
+          sp.render('application', 'index');
       });
     </script>
   </body>
