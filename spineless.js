@@ -6,7 +6,7 @@
    */
     var Application = function() {
         return {
-            controllers :[],
+            controllers : {},
             helpers: {
                 _default: function(locals) {
                     return $.extend(true, {},
@@ -16,9 +16,15 @@
         };
     };
 
+    var Request = function(route){
+      return $.extend(true, {
+        action : undefined,
+        controller : undefined,
+        params : undefined
+      }, route);
+    };
+
     var Spineless = function(options) {
-        this.app = new Application();
-        this.app.get = get;
         var that = this;
         var templates = function(method, locals) {
             return (that.app.helpers.hasOwnProperty(method)) ? that.app.helpers[method](locals) : that.app.helpers._default(locals);
@@ -68,14 +74,14 @@
             }
         };
 
-        var renderView = function(controller, action, params) {
+        var render = function() {
             var view,
             kontroller;
-            kontroller = $(".controller[data-controller=" + controller + "]");
-            view = $(".controller[data-controller=" + controller + "] .view[data-action=" + action + "]");
+            kontroller = $(".controller[data-controller=" + that.request.controller + "]");
+            view = $(".controller[data-controller=" + that.request.controller + "] .view[data-action=" + that.request.action + "]");
             $('.view.active').removeClass('active');
             $('.controller.active').removeClass('active');
-            if ($(".container[data-controller=" + controller + "]") && $(".view[data-action=" + action + "]")) {
+            if ($(".container[data-controller=" + that.request.controller + "]") && $(".view[data-action=" + that.request.action + "]")) {
                 $.each(view.find("*[data-template]"),
                 function(i, e) {
                     renderTemplate($(e));
@@ -89,16 +95,26 @@
             var url;
             url = element.attr('href') || $(element).attr('data-href');
             var route = parseRoute(url);
-            get(route.controller, route.action);
+            get(route.controller,route.action,route.params);
         };
 
-        function get(controller, action, params) {
+        var controllerActionAvailable = function(){
+          return that.app.controllers.hasOwnProperty(that.request.controller) &&
+          that.app.controllers[that.request.controller].hasOwnProperty(that.request.action);
+        };
+
+        function get(controller,action,params) {
+            that.request = new Request({ controller : controller, action : action, params : params });
             $('body').removeClass('rendered');
             $('html,body').animate({
                 scrollTop: 0
             },
             1);
-            renderView(controller, action, params);
+            if(controllerActionAvailable()){
+              that.app.controllers[that.request.controller][that.request.action].apply(that.app,[that.request]);
+            }else{
+              render();
+            }
             $('body').attr('data-controller', controller);
             $('body').attr('data-action', action);
             $('body').addClass('rendered');
@@ -112,6 +128,11 @@
             });
             $.extend(true, that.app, options);
         }
+
+        this.app = new Application();
+        this.app.get = get;
+        this.app.render = render;
+
         init(options);
         return this.app;
     };

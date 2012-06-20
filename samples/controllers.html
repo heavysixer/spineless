@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hello World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/application.css" type="text/css" media="screen">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <h1>Examples of custom controller methods</h1>
+    <div class="application">
+      <div class="controller" data-controller='application'>
+        <div class="view" data-action='index'>
+          <div data-template='nav' style="float:left;"></div>
+          <div style="float:left;"></div>
+        </div>
+        <div class="view" data-action='bing'>
+          <div data-template='nav' style="float:left;"></div>
+          <div style="float:left;">
+            <h1>Bing!</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="templates">
+      <div data-template-name='nav'>
+        <ul>
+          <li><a class='route' href='/application/index'>Home</a></li>
+          <li><a class='route' href='/application/bing'>Bing</a></li>
+          <li><a href='http://www.google.com'>Google</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="../lib/jquery-1.7.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lib/jquery.mustache.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../spineless.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+          var sp = $.spineless({
+            controllers : {
+              application : {
+                bing : function(request){
+                  this.render();
+                }
+              }
+            }
+          });
+          sp.get('application', 'index');
+      });
+    </script>
+  </body>
+</html>

@@ -56,7 +56,7 @@ Spineless uses the concept of controllers and views and partials (called templat
   <script type="text/javascript">
     $(document).ready(function(){
       var sp = $.spineless();
-      sp.render('application', 'index');
+      sp.get('application', 'index');
     });
   </script>
 </body>
