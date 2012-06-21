@@ -1,4 +1,6 @@
 /**
+Version 0.1.0
+
 A simple MVC stack without the need of a backbone.
 [https://github.com/heavysixer/spineless](https://github.com/heavysixer/spineless)
 
@@ -13,13 +15,74 @@ massive dependency chains here is a list of things you DO NOT need to run spinel
 3. An internet connection! (srsly)
 
 Spineless has only two dependencies, JQuery and Mustache.js, both whch come bundled
-with the project.
+with the project inside the /lib directory.
 
 Like any good MVC framework Spineless uses the concept of models, controllers and views.
 
 - Spineless models are essentially Javascript objects and completely optional.
 - Controllers are used to marshall commands from the views to the models where needed
 - Views are the visual interface that the user sees.
+
+In addition to the normal MVC stack, Spineless also uses the concept of helpers and templates.
+
+- Templates are HTML snippets, which are used by views to get better use of reusable code.
+- Helpers are functions that enhance a template's local variables with business logic. 
+
+Going Spineless in less than 10 minutes
+---------------------------------------
+
+The entire Spineless application resides inside the ".application" div. An application consists
+of a collection of controllers which in turn contain a collection of views. 
+Consider the following example:
+
+```<div class="application">
+      <div class="controller" data-controller='application'>
+        <div class="view" data-action='index'>
+          Hello World!
+        </div>
+      </div>
+    </div>
+```
+
+In this example you'll see that we have defined an application with a single controller. The name
+of the controller is defined by the `data-controller` attribute. This attribute is required by
+Spineless to route requests to the proper location. Views are much like controllers, but instead
+of using the `data-controller` attribute they use the `data-action`.
+
+Routing Requests
+----------------
+Routing requests through Spineless is incredibly painless to make any link a spineless request
+just add the "route" class. For example:
+
+`<a class="route" href="/application/hello">Hello</a>`
+
+When the user clicks on this link they will now be routed to the application controller where
+the `#hello` method will be called. If you are not using an element that support the `href` attribute
+you can also place your url inside a `data-href` attribute:
+
+`<div class="route" data-href="/application/hello">Hello</div>`
+
+If you want to manually trigger a route request from within Javascript you can call the `get` function:
+
+`spineless.get('application', 'index');`
+
+Custom Controller Actions
+-------------------------
+
+```
+    $(document).ready(function() {
+        var sp = $.spineless({
+          controllers : {
+            application : {
+              bing : function(elements, request){
+                this.render(elements);
+              }
+            }
+          }
+        });
+        sp.get('application', 'index');
+    });
+```
 
 */
 (function($) {
