@@ -46,7 +46,7 @@ Spineless uses the concept of controllers and views and partials (called templat
       <ul>
         <!-- links can be used in spineless by adding the "route" class to them -->
         <li><a class="route" href="/">Home</a></li>
-        <li><a class="route" href="/application/hello">Hello</a></li>
+        <li><span class="route" data-href="/application/hello">Hello</span></li>
       </ul>
     </div>
   </div>

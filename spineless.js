@@ -121,7 +121,7 @@ Custom Controller Actions
     var Spineless = function(options) {
         var that = this;
         var templates = function(method, locals) {
-            return (that.app.helpers.hasOwnProperty(method)) ? that.app.helpers[method](locals) : that.app.helpers._default(locals);
+            return (that.app.helpers.hasOwnProperty(method)) ? that.app.helpers[method].apply(that.app,[locals]) : that.app.helpers._default(locals);
         };
 
         var parseRoute = function(str) {
@@ -206,6 +206,7 @@ Custom Controller Actions
 
         var get = function(controller, action, params) {
             that.request = new Request(controller, action, params);
+            that.app.request = that.request;
             $('body').removeClass('rendered');
             $('html,body').animate({
                 scrollTop: 0
