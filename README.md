@@ -67,6 +67,11 @@ TODO
 Improved routing engine as described in this proposed routing API:
 https://gist.github.com/84e8f173925b81cb20eb
 
+Documentation
+=============
+Documentation is generated using the Rocco gem. To regenerate documentation paste this 
+snippet into your console: rocco -l js spineless.js There is also a Gaurdfile that will watch for changes to spineless.js and automatically update documentation each time the file is saved.
+
 Authors
 =======
 

@@ -1,9 +1,28 @@
-(function($) {
+/**
+A simple MVC stack without the need of a backbone.
+[https://github.com/heavysixer/spineless](https://github.com/heavysixer/spineless)
 
-    /*!
-   * spineless.js - A simple MVC stack without the need of a backbone.
-   * https://github.com/heavysixer/spineless
-   */
+The goal of Spineless is to provide "just enough framework" to succeed. If we have done 
+our job you should be able to write your first Spineless app in less than 10 minutes.
+
+Spineless is meant to run with virtually no dependencies. In fact in an age of frameworks with 
+massive dependency chains here is a list of things you DO NOT need to run spineless.
+
+1. A persistance layer (e.g. database)
+2. A backend server (e.g. node.js)
+3. An internet connection! (srsly)
+
+Spineless has only two dependencies, JQuery and Mustache.js, both whch come bundled
+with the project.
+
+Like any good MVC framework Spineless uses the concept of models, controllers and views.
+
+- Spineless models are essentially Javascript objects and completely optional.
+- Controllers are used to marshall commands from the views to the models where needed
+- Views are the visual interface that the user sees.
+
+*/
+(function($) {
     var Application = function() {
         return {
             controllers: {},
