@@ -66,9 +66,17 @@ If you want to manually trigger a route request from within Javascript you can c
 
 `spineless.get('application', 'index');`
 
+Helpers
+-------------------------
+*TODO*
+
+Templates & Partials
+-------------------------
+*TODO*
+
 Custom Controller Actions
 -------------------------
-
+*TODO*
 ```
     $(document).ready(function() {
         var sp = $.spineless({
