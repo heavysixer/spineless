@@ -219,7 +219,7 @@ Custom Controller Actions
             $('body').attr('data-controller', root.request.params.controller);
             $('body').attr('data-action', root.request.params.action);
             $('body').addClass('rendered');
-            root.app.publish("afterRender");
+            root.app.publish("afterRender",root.app);
         };
 
         var get = function(controller, action, params) {
