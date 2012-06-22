@@ -16,10 +16,10 @@
     </tr>
   </thead>
   <tbody>
-    <tr id='section-Going_Spineless_in_less_than_10_minutes'>
+    <tr id='section-Going_Spineless_in_10_minutes_or_less'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-Going_Spineless_in_less_than_10_minutes">&#182;</a>
+          <a class="pilcrow" href="#section-Going_Spineless_in_10_minutes_or_less">&#182;</a>
         </div>
         <p>Version 0.1.0</p>
 
@@ -56,7 +56,7 @@ with the project inside the /lib directory.</p>
 <li>Helpers are functions that enhance a template&rsquo;s local variables with business logic. </li>
 </ul>
 
-<h2>Going Spineless in less than 10 minutes</h2>
+<h2>Going Spineless in 10 minutes or less</h2>
 
 <p>The entire Spineless application resides inside the &ldquo;.application&rdquo; div. An application consists
 of a collection of controllers which in turn contain a collection of views. 
@@ -121,7 +121,7 @@ you can also place your url inside a <code>data-href</code> attribute:</p>
 
       </td>
       <td class=code>
-        <div class='highlight'><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+        <div class='highlight'><pre> <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">Application</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="nx">controllers</span><span class="o">:</span> <span class="p">{},</span>
@@ -147,9 +147,9 @@ you can also place your url inside a <code>data-href</code> attribute:</p>
     <span class="p">};</span>
 
     <span class="kd">var</span> <span class="nx">Spineless</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">root</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">templates</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">locals</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">method</span><span class="p">))</span> <span class="o">?</span> <span class="nx">that</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="nx">method</span><span class="p">](</span><span class="nx">locals</span><span class="p">)</span> <span class="o">:</span> <span class="nx">that</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">_default</span><span class="p">(</span><span class="nx">locals</span><span class="p">);</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">method</span><span class="p">))</span> <span class="o">?</span> <span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="nx">method</span><span class="p">].</span><span class="nx">apply</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">,</span> <span class="p">[</span><span class="nx">locals</span><span class="p">])</span> <span class="o">:</span> <span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">_default</span><span class="p">(</span><span class="nx">locals</span><span class="p">);</span>
         <span class="p">};</span>
 
         <span class="kd">var</span> <span class="nx">parseRoute</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
@@ -197,12 +197,12 @@ you can also place your url inside a <code>data-href</code> attribute:</p>
         <span class="p">};</span>
 
         <span class="kd">var</span> <span class="nx">prepareRender</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">controller</span> <span class="o">&amp;&amp;</span> <span class="nx">that</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">view</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">controller</span> <span class="o">&amp;&amp;</span> <span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">view</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.view.active&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">);</span>
                 <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.controller.active&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">);</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">);</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">controller</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">);</span>
-                <span class="k">return</span> <span class="nx">that</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;*[data-template]&quot;</span><span class="p">);</span>
+                <span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">);</span>
+                <span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">controller</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">);</span>
+                <span class="k">return</span> <span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;*[data-template]&quot;</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">return</span> <span class="p">[];</span>
         <span class="p">};</span>
@@ -222,18 +222,19 @@ you can also place your url inside a <code>data-href</code> attribute:</p>
         <span class="p">};</span>
 
         <span class="kd">var</span> <span class="nx">controllerActionAvailable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">that</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">controllers</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">controller</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">controllers</span><span class="p">[</span><span class="nx">that</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">controller</span><span class="p">].</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">action</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">controllers</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">controller</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+            <span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">controllers</span><span class="p">[</span><span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">controller</span><span class="p">].</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">action</span><span class="p">);</span>
         <span class="p">};</span>
 
         <span class="kd">var</span> <span class="nx">postRender</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-controller&#39;</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">controller</span><span class="p">);</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-action&#39;</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">action</span><span class="p">);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-controller&#39;</span><span class="p">,</span> <span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">controller</span><span class="p">);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-action&#39;</span><span class="p">,</span> <span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">action</span><span class="p">);</span>
             <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;rendered&#39;</span><span class="p">);</span>
         <span class="p">};</span>
 
         <span class="kd">var</span> <span class="nx">get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">controller</span><span class="p">,</span> <span class="nx">action</span><span class="p">,</span> <span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">that</span><span class="p">.</span><span class="nx">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Request</span><span class="p">(</span><span class="nx">controller</span><span class="p">,</span> <span class="nx">action</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+            <span class="nx">root</span><span class="p">.</span><span class="nx">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Request</span><span class="p">(</span><span class="nx">controller</span><span class="p">,</span> <span class="nx">action</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+            <span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">request</span> <span class="o">=</span> <span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">;</span>
             <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;rendered&#39;</span><span class="p">);</span>
             <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;html,body&#39;</span><span class="p">).</span><span class="nx">animate</span><span class="p">({</span>
                 <span class="nx">scrollTop</span><span class="o">:</span> <span class="mi">0</span>
@@ -242,7 +243,7 @@ you can also place your url inside a <code>data-href</code> attribute:</p>
 
             <span class="kd">var</span> <span class="nx">itemsToRender</span> <span class="o">=</span> <span class="nx">prepareRender</span><span class="p">();</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">controllerActionAvailable</span><span class="p">())</span> <span class="p">{</span>
-                <span class="nx">that</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">controllers</span><span class="p">[</span><span class="nx">that</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">controller</span><span class="p">][</span><span class="nx">that</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">action</span><span class="p">].</span><span class="nx">apply</span><span class="p">(</span><span class="nx">that</span><span class="p">.</span><span class="nx">app</span><span class="p">,</span> <span class="p">[</span><span class="nx">itemsToRender</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">request</span><span class="p">]);</span>
+                <span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">controllers</span><span class="p">[</span><span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">controller</span><span class="p">][</span><span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">action</span><span class="p">].</span><span class="nx">apply</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">,</span> <span class="p">[</span><span class="nx">itemsToRender</span><span class="p">,</span> <span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">]);</span>
             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                 <span class="nx">render</span><span class="p">(</span><span class="nx">itemsToRender</span><span class="p">);</span>
             <span class="p">}</span>
@@ -256,7 +257,7 @@ you can also place your url inside a <code>data-href</code> attribute:</p>
                 <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
                 <span class="nx">route</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
             <span class="p">});</span>
-            <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="nx">that</span><span class="p">.</span><span class="nx">app</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+            <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Application</span><span class="p">();</span>

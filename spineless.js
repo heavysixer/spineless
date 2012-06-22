@@ -28,7 +28,7 @@ In addition to the normal MVC stack, Spineless also uses the concept of helpers 
 - Templates are HTML snippets, which are used by views to get better use of reusable code.
 - Helpers are functions that enhance a template's local variables with business logic. 
 
-Going Spineless in less than 10 minutes
+Going Spineless in 10 minutes or less
 ---------------------------------------
 
 The entire Spineless application resides inside the ".application" div. An application consists
@@ -93,7 +93,7 @@ Custom Controller Actions
 ```
 
 */
-(function($) {
+ (function($) {
     var Application = function() {
         return {
             controllers: {},
@@ -119,9 +119,9 @@ Custom Controller Actions
     };
 
     var Spineless = function(options) {
-        var that = this;
+        var root = this;
         var templates = function(method, locals) {
-            return (that.app.helpers.hasOwnProperty(method)) ? that.app.helpers[method].apply(that.app,[locals]) : that.app.helpers._default(locals);
+            return (root.app.helpers.hasOwnProperty(method)) ? root.app.helpers[method].apply(root.app, [locals]) : root.app.helpers._default(locals);
         };
 
         var parseRoute = function(str) {
@@ -169,12 +169,12 @@ Custom Controller Actions
         };
 
         var prepareRender = function() {
-            if (that.request.controller && that.request.view) {
+            if (root.request.controller && root.request.view) {
                 $('.view.active').removeClass('active');
                 $('.controller.active').removeClass('active');
-                that.request.view.addClass('active');
-                that.request.controller.addClass("active");
-                return that.request.view.find("*[data-template]");
+                root.request.view.addClass('active');
+                root.request.controller.addClass("active");
+                return root.request.view.find("*[data-template]");
             }
             return [];
         };
@@ -194,19 +194,19 @@ Custom Controller Actions
         };
 
         var controllerActionAvailable = function() {
-            return that.app.controllers.hasOwnProperty(that.request.controller) &&
-            that.app.controllers[that.request.controller].hasOwnProperty(that.request.action);
+            return root.app.controllers.hasOwnProperty(root.request.controller) &&
+            root.app.controllers[root.request.controller].hasOwnProperty(root.request.action);
         };
 
         var postRender = function() {
-            $('body').attr('data-controller', that.request.params.controller);
-            $('body').attr('data-action', that.request.params.action);
+            $('body').attr('data-controller', root.request.params.controller);
+            $('body').attr('data-action', root.request.params.action);
             $('body').addClass('rendered');
         };
 
         var get = function(controller, action, params) {
-            that.request = new Request(controller, action, params);
-            that.app.request = that.request;
+            root.request = new Request(controller, action, params);
+            root.app.request = root.request;
             $('body').removeClass('rendered');
             $('html,body').animate({
                 scrollTop: 0
@@ -215,7 +215,7 @@ Custom Controller Actions
 
             var itemsToRender = prepareRender();
             if (controllerActionAvailable()) {
-                that.app.controllers[that.request.controller][that.request.action].apply(that.app, [itemsToRender, that.request]);
+                root.app.controllers[root.request.controller][root.request.action].apply(root.app, [itemsToRender, root.request]);
             } else {
                 render(itemsToRender);
             }
@@ -229,7 +229,7 @@ Custom Controller Actions
                 event.preventDefault();
                 route($(this));
             });
-            $.extend(true, that.app, options);
+            $.extend(true, root.app, options);
         }
 
         this.app = new Application();
