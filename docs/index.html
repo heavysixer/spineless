@@ -21,7 +21,7 @@
         <div class="pilwrap">
           <a class="pilcrow" href="#section-Going_Spineless_in_10_minutes_or_less">&#182;</a>
         </div>
-        <p>Version 0.1.0</p>
+        <p>Version 0.2.0</p>
 
 <p>A simple MVC stack without the need of a backbone.
 <a href="https://github.com/heavysixer/spineless">https://github.com/heavysixer/spineless</a></p>
@@ -146,6 +146,23 @@ you can also place your url inside a <code>data-href</code> attribute:</p>
         <span class="p">};</span>
     <span class="p">};</span>
 
+    <span class="kd">var</span> <span class="nx">PubSub</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="nx">$</span><span class="p">({});</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="nx">subscribe</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">o</span><span class="p">.</span><span class="nx">on</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+            <span class="p">},</span>
+
+            <span class="nx">unsubscribe</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">o</span><span class="p">.</span><span class="nx">off</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+            <span class="p">},</span>
+
+            <span class="nx">publish</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">o</span><span class="p">.</span><span class="nx">trigger</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    <span class="p">};</span>
+
     <span class="kd">var</span> <span class="nx">Spineless</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">root</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">templates</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">locals</span><span class="p">)</span> <span class="p">{</span>
@@ -230,6 +247,7 @@ you can also place your url inside a <code>data-href</code> attribute:</p>
             <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-controller&#39;</span><span class="p">,</span> <span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">controller</span><span class="p">);</span>
             <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-action&#39;</span><span class="p">,</span> <span class="nx">root</span><span class="p">.</span><span class="nx">request</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">action</span><span class="p">);</span>
             <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;rendered&#39;</span><span class="p">);</span>
+            <span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">publish</span><span class="p">(</span><span class="s2">&quot;afterRender&quot;</span><span class="p">);</span>
         <span class="p">};</span>
 
         <span class="kd">var</span> <span class="nx">get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">controller</span><span class="p">,</span> <span class="nx">action</span><span class="p">,</span> <span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
@@ -263,6 +281,7 @@ you can also place your url inside a <code>data-href</code> attribute:</p>
         <span class="k">this</span><span class="p">.</span><span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Application</span><span class="p">();</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="nx">get</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="nx">render</span><span class="p">;</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">app</span><span class="p">,</span> <span class="k">new</span> <span class="nx">PubSub</span><span class="p">());</span>
 
         <span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">app</span><span class="p">;</span>

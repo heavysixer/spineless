@@ -1,5 +1,5 @@
 /**
-Version 0.1.0
+Version 0.2.0
 
 A simple MVC stack without the need of a backbone.
 [https://github.com/heavysixer/spineless](https://github.com/heavysixer/spineless)
@@ -118,6 +118,23 @@ Custom Controller Actions
         };
     };
 
+    var PubSub = function() {
+        var o = $({});
+        return {
+            subscribe: function() {
+                o.on.apply(o, arguments);
+            },
+
+            unsubscribe: function() {
+                o.off.apply(o, arguments);
+            },
+
+            publish: function() {
+                o.trigger.apply(o, arguments);
+            }
+        };
+    };
+
     var Spineless = function(options) {
         var root = this;
         var templates = function(method, locals) {
@@ -202,6 +219,7 @@ Custom Controller Actions
             $('body').attr('data-controller', root.request.params.controller);
             $('body').attr('data-action', root.request.params.action);
             $('body').addClass('rendered');
+            root.app.publish("afterRender");
         };
 
         var get = function(controller, action, params) {
@@ -235,6 +253,7 @@ Custom Controller Actions
         this.app = new Application();
         this.app.get = get;
         this.app.render = render;
+        $.extend(true, this.app, new PubSub());
 
         init(options);
         return this.app;
