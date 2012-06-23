@@ -1,5 +1,5 @@
 /**
-Version 0.2.0
+Version 0.2.1
 
 A simple MVC stack without the need of a backbone.
 [https://github.com/heavysixer/spineless](https://github.com/heavysixer/spineless)
@@ -66,38 +66,30 @@ If you want to manually trigger a route request from within Javascript you can c
 
 `spineless.get('application', 'index');`
 
-Helpers
--------------------------
-*TODO*
+*/
 
-Templates & Partials
--------------------------
-*TODO*
+/**
+Helper functions
+Helpers are developer-created functions that execute during the rendering of specific templates. Just like in Rails, helpers are available globally across all views. To demonstrate, imagine we have two DIV tags with locals supplied as urlencoded JSON object:
 
-Custom Controller Actions
--------------------------
-*TODO*
+`&lt;div data-locals="{&quot;name&quot;:&quot;Mark&quot;}" data-template='hi-my-name-is'></div>
+&lt;div data-locals="{&quot;name&quot;:&quot;Slim Shady&quot;}" data-template='hi-my-name-is'></div>
+`
 
-```
-    $(document).ready(function() {
-        var sp = $.spineless({
-          controllers : {
-            application : {
-              bing : function(elements, request){
-                this.render(elements);
+As you can see these objects have a property called “name”, each with unique values. These locals are linked to the “hi-my-name-is” template. To create a helper we’ll bind a function to execute whenever the “hi-my-name-is” template is rendered. Doing this will allows us intercept the template instance's data-locals object and modify it anyway we choose before passing it along to Mustache to render. Here is the full example of the helper function:
+
+`
+ var sp = $.spineless({
+              helpers: {
+                  'hi-my-name-is': function(obj) {
+                      if (obj.name === 'Slim Shady') {
+                          obj.name = "*wikka wikka* " + obj.name;
+                      }
+                      return (obj);
+                  }
               }
-            }
-          }
-        });
-        sp.get('application', 'index');
-    });
-```
-
-Pub/Sub Events
---------------------------
-*TODO*
-
-
+          });
+`
 */
  (function($) {
     var Application = function() {
@@ -124,6 +116,32 @@ Pub/Sub Events
         };
     };
 
+/**
+PubSub for Spineless events
+---------------------------
+
+Spineless now has a very minimal publisher subscriber (PubSub) events framework. 
+The goal of this is to allow other code executing outside of Spineless to receive 
+updates when internal Spineless events execute, without having to know anything about
+how Spineless is implemented. Here is a trivial example of creating an observer 
+that is triggered every time a view is done rendering.
+
+`
+$(document).ready(function() {
+          var sp = $.spineless();
+          sp.subscribe('afterRender', function(publisher, app){
+            app.request.view.append("<h1>Yes it has!</h1>")
+          })
+          sp.get('application', 'index');
+      });
+`
+
+When the publisher executes a subscriber’s function it passes a reference to itself 
+and the Spineless app instance as arguments. This allows the receiver to manage it’s 
+subscriptions and gives the function access to the the Spineless current request, 
+params hash among other things.
+
+*/
     var PubSub = function() {
         var o = $({});
         return {
@@ -170,7 +188,21 @@ Pub/Sub Events
             }
             return hsh;
         };
+/**
+Passing local variables to templates
+------------------------------------
 
+When rendering templates, Spineless substitutes predefined template variables with 
+those you supply using JSON. The JSON can be provided in at least two ways:
+
+1. By url encoded a json object into the “data-locals” attribute.
+2. Creating of modifying the JSON object using a helper function.
+
+I will explain the helper function method next, but here is a simple example of what the data-locals method looks like:
+
+  <div data-locals="{&quot;name&quot;:&quot;Mark&quot;}" data-template='hi-my-name-is'></div>
+
+*/
         var parseLocals = function(view) {
             var locals = $(view).attr('data-locals');
             if (locals !== undefined) {
@@ -215,7 +247,34 @@ Pub/Sub Events
             var route = parseRoute(url);
             get(route.controller, route.action, route.params);
         };
+/**
+Controller functions
+---------------------
 
+Controller functions are optional code that developers can write to augment the 
+rendering of the view. Controller functions work much like helper functions do, 
+in that they are executed before the view is returned to the screen. Unlike helper 
+functions which are linked to an arbitrary number of templates; controller functions 
+are scoped to just one controller action. Consider this example which executes when 
+someone visits “/users/update”:
+
+`
+var sp = $.spineless({
+  controllers : {
+    users : {
+      update : function(elements, request){
+        if($.currentUser.isAdmin()){
+           this.render(elements);
+        } else {
+            alert(“Access Denied”);
+        }
+      }
+    }
+  }
+});
+sp.get('application', 'index');
+`
+*/
         var controllerActionAvailable = function() {
             return root.app.controllers.hasOwnProperty(root.request.params.controller) &&
             root.app.controllers[root.request.params.controller].hasOwnProperty(root.request.params.action);
