@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Hello World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="screen">
     <link rel="stylesheet" href="css/spineless.css" type="text/css" media="screen">
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -11,10 +12,10 @@
     <![endif]-->
   </head>
   <body>
-    <h1>Examples of helper methods and local variables</h1>
-    <div class="application">
+    <div class="application container">
       <div class="controller" data-controller='application'>
         <div class="view" data-action='index'>
+          <h1>Examples of helper methods and local variables</h1>
           <div data-locals="{&quot;name&quot;:&quot;Mark&quot;}" data-template='hi-my-name-is'></div>
           <div data-locals="{&quot;name&quot;:&quot;Tron&quot;}" data-template='hi-my-name-is'></div>
           <div data-locals="{&quot;name&quot;:&quot;Slim Shady&quot;}" data-template='hi-my-name-is'></div>
@@ -23,7 +24,7 @@
     </div>
     <div class="templates">
       <div data-template-name='hi-my-name-is'>
-        <h1>Hy My name is {{name}}</h1>
+        <h3>Hy My name is {{name}}</h3>
       </div>
     </div>
 
@@ -36,7 +37,7 @@
               helpers: {
                   'hi-my-name-is': function(obj) {
                       if (obj.name === 'Slim Shady') {
-                          obj.name = "*wikka wikka* " + obj.name + " *wikka wikka*";
+                          obj.name = "*wikka wikka* " + obj.name;
                       }
                       return (obj);
                   }

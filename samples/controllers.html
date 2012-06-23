@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Hello World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="screen">
     <link rel="stylesheet" href="css/spineless.css" type="text/css" media="screen">
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -11,16 +12,18 @@
     <![endif]-->
   </head>
   <body>
-    <h1>Examples of custom controller methods</h1>
-    <div class="application">
+    <div class="application container">
       <div class="controller" data-controller='application'>
         <div class="view" data-action='index'>
-          <div data-template='nav' style="float:left;"></div>
-          <div style="float:left;"></div>
+          <h1>Examples of custom controller methods</h1>
+          <div data-template='nav' class="span2"></div>
+          <div class="span4"></div>
         </div>
+
         <div class="view" data-action='bing'>
-          <div data-template='nav' style="float:left;"></div>
-          <div style="float:left;">
+          <h1>Examples of custom controller methods</h1>
+          <div data-template='nav' class="span2"></div>
+          <div class="span4">
             <h1>Bing!</h1>
           </div>
         </div>
@@ -31,7 +34,7 @@
         <ul>
           <li><a class='route' href='/application/index'>Home</a></li>
           <li><a class='route' href='/application/bing'>Bing</a></li>
-          <li><a href='http://www.google.com'>Google</a></li>
+          <li><a class="google" href='http://www.google.com'>Google</a></li>
         </ul>
       </div>
     </div>
@@ -46,6 +49,9 @@
               application : {
                 bing : function(elements, request){
                   this.render(elements);
+                  console.log($(".google"));
+                  $(".google").attr("href","http://www.bing.com")
+                  $(".google").html("there is no goog there is only bing")
                 }
               }
             }

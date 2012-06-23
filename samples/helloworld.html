@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Hello World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="screen">
     <link rel="stylesheet" href="css/spineless.css" type="text/css" media="screen">
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -11,18 +12,22 @@
     <![endif]-->
   </head>
   <body>
+    <!-- Anything outside of the .application class is ignored by spineless //-->
     <h1>Welcome to the hello world application</h1>
-    <div class="application">
+
+    <div class="application container">
       <div class="controller" data-controller='application'>
         <div class="view" data-action='index'>
-          <div style="float:left;" data-template='sideNav'></div>
-          <div style="float:left;">
+          <div class="span2" data-template='sideNav'></div>
+          <div class="span4">
              &lt;-- click a link on the side nav.
           </div>
         </div>
         <div class="view" data-action='hello'>
-          <div style="float:left;" data-template='sideNav'></div>
-          <h1>HELLO!!!!</h1>
+          <div class="span2" data-template='sideNav'></div>
+          <div class="well span4">
+            <h1>HELLO!!!!</h1>
+          </div>
         </div>
       </div>
     </div>
