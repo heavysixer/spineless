@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hello World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="css/spineless.css" type="text/css" media="screen">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="application container">
+      <div class="controller" data-controller='application'>
+        <div class="view" data-action='index'>
+          <h2>Has the view completed rendering?</h2>
+        </div>
+      </div>
+    </div>
+
+    <script src="../lib/jquery-1.7.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lib/jquery.mustache.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../spineless.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+          var sp = $.spineless();
+          sp.subscribe('afterRender', function(publisher, app){
+            app.request.view.append("<h1>Yes it has!</h1>")
+          })
+          sp.get('application', 'index');
+      });
+    </script>
+  </body>
+</html>

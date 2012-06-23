@@ -77,6 +77,7 @@ Templates & Partials
 Custom Controller Actions
 -------------------------
 *TODO*
+
 ```
     $(document).ready(function() {
         var sp = $.spineless({
@@ -91,6 +92,11 @@ Custom Controller Actions
         sp.get('application', 'index');
     });
 ```
+
+Pub/Sub Events
+--------------------------
+*TODO*
+
 
 */
  (function($) {
@@ -211,15 +217,15 @@ Custom Controller Actions
         };
 
         var controllerActionAvailable = function() {
-            return root.app.controllers.hasOwnProperty(root.request.controller) &&
-            root.app.controllers[root.request.controller].hasOwnProperty(root.request.action);
+            return root.app.controllers.hasOwnProperty(root.request.params.controller) &&
+            root.app.controllers[root.request.params.controller].hasOwnProperty(root.request.params.action);
         };
 
         var postRender = function() {
             $('body').attr('data-controller', root.request.params.controller);
             $('body').attr('data-action', root.request.params.action);
             $('body').addClass('rendered');
-            root.app.publish("afterRender",root.app);
+            root.app.publish("afterRender", root.app);
         };
 
         var get = function(controller, action, params) {
@@ -233,7 +239,7 @@ Custom Controller Actions
 
             var itemsToRender = prepareRender();
             if (controllerActionAvailable()) {
-                root.app.controllers[root.request.controller][root.request.action].apply(root.app, [itemsToRender, root.request]);
+                root.app.controllers[root.request.params.controller][root.request.params.action].apply(root.app, [itemsToRender, root.request]);
             } else {
                 render(itemsToRender);
             }
