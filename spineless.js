@@ -14,7 +14,7 @@ massive dependency chains here is a list of things you DO NOT need to run spinel
 2. A backend server (e.g. node.js)
 3. An internet connection! (srsly)
 
-Spineless has only two dependencies, JQuery and Mustache.js, both whch come bundled
+Spineless has only two dependencies, JQuery and Mustache.js, both which come bundled
 with the project inside the /lib directory.
 
 Like any good MVC framework Spineless uses the concept of models, controllers and views.
@@ -116,7 +116,43 @@ As you can see these objects have a property called “name”, each with unique
         };
     };
 
-/**
+    // Router expects a `get` function to be defined by the object it is mixed into.
+    var Router = function() {
+        return {
+            parseRoute: function(str) {
+                var hsh = $.extend(true, {},
+                {
+                    controller: 'application',
+                    action: 'index'
+                });
+                while (str.charAt(0) == '/') {
+                    str = str.substr(1);
+                }
+
+                if (str.length > 0) {
+                    $.each(str.split('/'),
+                    function(i, e) {
+                        if (i === 0) {
+                            hsh.controller = e;
+                        }
+                        if (i === 1) {
+                            hsh.action = e;
+                        }
+                    });
+                }
+                return hsh;
+            },
+
+            route: function(element) {
+                var url;
+                url = element.attr('href') || $(element).attr('data-href');
+                var route = this.parseRoute(url);
+                this.get(route.controller, route.action, route.params);
+            }
+        };
+    };
+
+    /**
 PubSub for Spineless events
 ---------------------------
 
@@ -165,30 +201,7 @@ params hash among other things.
             return (root.app.helpers.hasOwnProperty(method)) ? root.app.helpers[method].apply(root.app, [locals]) : root.app.helpers._default(locals);
         };
 
-        var parseRoute = function(str) {
-            var hsh = $.extend(true, {},
-            {
-                controller: 'application',
-                action: 'index'
-            });
-            while (str.charAt(0) == '/') {
-                str = str.substr(1);
-            }
-
-            if (str.length > 0) {
-                $.each(str.split('/'),
-                function(i, e) {
-                    if (i === 0) {
-                        hsh.controller = e;
-                    }
-                    if (i === 1) {
-                        hsh.action = e;
-                    }
-                });
-            }
-            return hsh;
-        };
-/**
+        /**
 Passing local variables to templates
 ------------------------------------
 
@@ -207,6 +220,8 @@ I will explain the helper function method next, but here is a simple example of 
             var locals = $(view).attr('data-locals');
             if (locals !== undefined) {
                 locals = $.parseJSON(locals);
+            } else {
+                locals = {};
             }
             return locals;
         };
@@ -241,13 +256,7 @@ I will explain the helper function method next, but here is a simple example of 
             });
         };
 
-        var route = function(element) {
-            var url;
-            url = element.attr('href') || $(element).attr('data-href');
-            var route = parseRoute(url);
-            get(route.controller, route.action, route.params);
-        };
-/**
+        /**
 Controller functions
 ---------------------
 
@@ -310,15 +319,16 @@ sp.get('application', 'index');
             $(document).on('click', '.route',
             function(event) {
                 event.preventDefault();
-                route($(this));
+                root.app.route($(this));
             });
             $.extend(true, root.app, options);
         }
 
         this.app = new Application();
+        $.extend(true, this.app, new Router());
+        $.extend(true, this.app, new PubSub());
         this.app.get = get;
         this.app.render = render;
-        $.extend(true, this.app, new PubSub());
 
         init(options);
         return this.app;

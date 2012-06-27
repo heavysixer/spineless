@@ -38,7 +38,7 @@ massive dependency chains here is a list of things you DO NOT need to run spinel
 <li>An internet connection! (srsly)</li>
 </ol>
 
-<p>Spineless has only two dependencies, JQuery and Mustache.js, both whch come bundled
+<p>Spineless has only two dependencies, JQuery and Mustache.js, both which come bundled
 with the project inside the /lib directory.</p>
 
 <p>Like any good MVC framework Spineless uses the concept of models, controllers and views.</p>
@@ -151,6 +151,50 @@ Helpers are developer-created functions that execute during the rendering of spe
     <span class="p">};</span></pre></div>
       </td>
     </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>Router expects a <code>get</code> function to be defined by the object it is mixed into.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="kd">var</span> <span class="nx">Router</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="nx">parseRoute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">hsh</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="p">{},</span>
+                <span class="p">{</span>
+                    <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;application&#39;</span><span class="p">,</span>
+                    <span class="nx">action</span><span class="o">:</span> <span class="s1">&#39;index&#39;</span>
+                <span class="p">});</span>
+                <span class="k">while</span> <span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">),</span>
+                    <span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="nx">hsh</span><span class="p">.</span><span class="nx">controller</span> <span class="o">=</span> <span class="nx">e</span><span class="p">;</span>
+                        <span class="p">}</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="nx">hsh</span><span class="p">.</span><span class="nx">action</span> <span class="o">=</span> <span class="nx">e</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">});</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="nx">hsh</span><span class="p">;</span>
+            <span class="p">},</span>
+
+            <span class="nx">route</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">url</span><span class="p">;</span>
+                <span class="nx">url</span> <span class="o">=</span> <span class="nx">element</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="nx">$</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-href&#39;</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">route</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">parseRoute</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">route</span><span class="p">.</span><span class="nx">controller</span><span class="p">,</span> <span class="nx">route</span><span class="p">.</span><span class="nx">action</span><span class="p">,</span> <span class="nx">route</span><span class="p">.</span><span class="nx">params</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+    <span class="p">};</span></pre></div>
+      </td>
+    </tr>
     <tr id='section-PubSub_for_Spineless_events'>
       <td class=docs>
         <div class="pilwrap">
@@ -201,30 +245,6 @@ params hash among other things.</p>
         <span class="kd">var</span> <span class="nx">root</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">templates</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">locals</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">return</span> <span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">method</span><span class="p">))</span> <span class="o">?</span> <span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">helpers</span><span class="p">[</span><span class="nx">method</span><span class="p">].</span><span class="nx">apply</span><span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">,</span> <span class="p">[</span><span class="nx">locals</span><span class="p">])</span> <span class="o">:</span> <span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">_default</span><span class="p">(</span><span class="nx">locals</span><span class="p">);</span>
-        <span class="p">};</span>
-
-        <span class="kd">var</span> <span class="nx">parseRoute</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">hsh</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="p">{},</span>
-            <span class="p">{</span>
-                <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;application&#39;</span><span class="p">,</span>
-                <span class="nx">action</span><span class="o">:</span> <span class="s1">&#39;index&#39;</span>
-            <span class="p">});</span>
-            <span class="k">while</span> <span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-            <span class="p">}</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">),</span>
-                <span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="nx">hsh</span><span class="p">.</span><span class="nx">controller</span> <span class="o">=</span> <span class="nx">e</span><span class="p">;</span>
-                    <span class="p">}</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="nx">hsh</span><span class="p">.</span><span class="nx">action</span> <span class="o">=</span> <span class="nx">e</span><span class="p">;</span>
-                    <span class="p">}</span>
-                <span class="p">});</span>
-            <span class="p">}</span>
-            <span class="k">return</span> <span class="nx">hsh</span><span class="p">;</span>
         <span class="p">};</span></pre></div>
       </td>
     </tr>
@@ -252,6 +272,8 @@ those you supply using JSON. The JSON can be provided in at least two ways:</p>
             <span class="kd">var</span> <span class="nx">locals</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">view</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-locals&#39;</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">locals</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">locals</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">parseJSON</span><span class="p">(</span><span class="nx">locals</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">locals</span> <span class="o">=</span> <span class="p">{};</span>
             <span class="p">}</span>
             <span class="k">return</span> <span class="nx">locals</span><span class="p">;</span>
         <span class="p">};</span>
@@ -284,13 +306,6 @@ those you supply using JSON. The JSON can be provided in at least two ways:</p>
             <span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">renderTemplate</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nx">e</span><span class="p">));</span>
             <span class="p">});</span>
-        <span class="p">};</span>
-
-        <span class="kd">var</span> <span class="nx">route</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">url</span><span class="p">;</span>
-            <span class="nx">url</span> <span class="o">=</span> <span class="nx">element</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="nx">$</span><span class="p">(</span><span class="nx">element</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-href&#39;</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">route</span> <span class="o">=</span> <span class="nx">parseRoute</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
-            <span class="nx">get</span><span class="p">(</span><span class="nx">route</span><span class="p">.</span><span class="nx">controller</span><span class="p">,</span> <span class="nx">route</span><span class="p">.</span><span class="nx">action</span><span class="p">,</span> <span class="nx">route</span><span class="p">.</span><span class="nx">params</span><span class="p">);</span>
         <span class="p">};</span></pre></div>
       </td>
     </tr>
@@ -362,15 +377,16 @@ sp.get('application', 'index');
             <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;.route&#39;</span><span class="p">,</span>
             <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
-                <span class="nx">route</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+                <span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">route</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
             <span class="p">});</span>
             <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="nx">root</span><span class="p">.</span><span class="nx">app</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Application</span><span class="p">();</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">app</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Router</span><span class="p">());</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">app</span><span class="p">,</span> <span class="k">new</span> <span class="nx">PubSub</span><span class="p">());</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="nx">get</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="nx">render</span><span class="p">;</span>
-        <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">app</span><span class="p">,</span> <span class="k">new</span> <span class="nx">PubSub</span><span class="p">());</span>
 
         <span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">app</span><span class="p">;</span>
