@@ -1,5 +1,5 @@
 /**
-Version 0.2.1
+Version 0.3.1
 
 A simple MVC stack without the need of a backbone.
 [https://github.com/heavysixer/spineless](https://github.com/heavysixer/spineless)
