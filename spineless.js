@@ -1,5 +1,5 @@
 /**
-Version 0.3.1
+Version 0.3.2
 
 A simple MVC stack without the need of a backbone.
 [https://github.com/heavysixer/spineless](https://github.com/heavysixer/spineless)
@@ -119,7 +119,8 @@ As you can see these objects have a property called “name”, each with unique
     // Router expects a `get` function to be defined by the object it is mixed into.
     var Router = function() {
         return {
-            parseRoute: function(str) {
+            parseRoute: function(route) {
+                str = route + '';
                 var hsh = $.extend(true, {},
                 {
                     controller: 'application',
