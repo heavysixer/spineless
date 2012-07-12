@@ -67,6 +67,9 @@ TODO
 Improved routing engine as described in this proposed routing API:
 https://gist.github.com/84e8f173925b81cb20eb
 
+* Discussion on how to use Layouts
+* Create a remote template option which will fetch and cache a template from a server 
+
 Documentation
 =============
 Documentation is generated using the Rocco gem. To regenerate documentation paste this 
