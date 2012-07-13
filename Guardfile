@@ -7,4 +7,4 @@
 #   end
 # end
 
-guard 'coffeescript', :input => 'coffee', :output => 'js'
+guard 'coffeescript', :input => 'coffee', :output => '.'
