@@ -1,3 +1,5 @@
+*this project is no longer maintained*
+
 Spineless.js a simple MVC without the need of a backbone
 =========
 
